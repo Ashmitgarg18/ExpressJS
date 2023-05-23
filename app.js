@@ -1,15 +1,27 @@
 const express = require('express')
-const { products } = require('./data')
-const app = express();
+const app = express()
+const people = require('./routes/people')
+const auth = require('./routes/auth')
 
 
-app.get('/', (req,res)=>{
-    res.json(products)
-    // res.json({ user: 'tobi' })
+app.use(express.static('./methods-public'))
 
 
-})
+// parse form data
+
+app.use(express.urlencoded({extended: false}))
+// This middleware function parses the url encoded data 
+// and then it populates req.body with it in form of key value pairs
+
+// parse json
+app.use(express.json())
+
+
+app.use('/api/people', people)
+
+app.use('/login', auth)
+
 
 app.listen(5000, ()=>{
-    console.log('The server is listening on port 5000...')
+    console.log("Server is listening on Port 5000...");
 })
